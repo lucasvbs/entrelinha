@@ -82,10 +82,20 @@ function Home() {
     }
 
     let animationFrame = 0;
+    let previousScrollY = window.scrollY;
 
     const updatePlayback = () => {
+      const currentScrollY = window.scrollY;
+      const scrollingDown = currentScrollY >= previousScrollY;
+      previousScrollY = currentScrollY;
       const x = Math.min(window.innerWidth - 1, Math.round(window.innerWidth / 2));
-      const y = Math.min(window.innerHeight - 1, Math.round(window.innerHeight / 2));
+      const y = Math.min(
+        window.innerHeight - 1,
+        Math.max(
+          0,
+          Math.round(window.innerHeight * (scrollingDown ? 0.82 : 0.18)),
+        ),
+      );
       const activeCard = document
         .elementFromPoint(x, y)
         ?.closest<HTMLElement>('.film-card');
