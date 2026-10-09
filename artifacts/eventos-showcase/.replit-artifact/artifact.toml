@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Experiência de Eventos"
+description = "Uma landing page de demonstração para apresentar experiências de eventos com hero cinematográfico e vídeos em camadas durante a rolagem."
+version = "1.0.0"
+id = "artifacts/eventos-showcase"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24408
+
+[services.development]
+run = "pnpm --filter @workspace/eventos-showcase run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/eventos-showcase", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/eventos-showcase/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24408"
+BASE_PATH = "/"
