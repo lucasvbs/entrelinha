@@ -190,7 +190,7 @@ function Home() {
           <article className="film-card" key={film.id}>
             <video
               className="film-preview"
-              src={film.video}
+              src={film.previewVideo}
               poster={film.poster}
               data-testid={`film-preview-${film.id}`}
               muted
@@ -289,8 +289,9 @@ const films = [
     plainTitle: 'A cerimónia',
     title: <>O começo<br />de <em>tudo.</em></>,
     description: 'O primeiro aplauso, o abraço apertado, a certeza de que esse momento vai ficar.',
-    poster: '/images/demo-ceremony.jpg',
-    video: '/videos/demo-ceremony.mp4',
+    poster: '/images/event-ceremony-poster.jpg',
+    previewVideo: '/videos/event-ceremony-preview.mp4',
+    video: '/videos/event-ceremony-full.mp4',
     alt: 'Celebração de formatura em um palco iluminado por luz dourada',
   },
   {
@@ -300,8 +301,9 @@ const films = [
     plainTitle: 'A celebração',
     title: <>Até a noite<br /><em>dançar.</em></>,
     description: 'A música sobe, os sapatos ficam de lado. O melhor plano é não ter plano.',
-    poster: '/images/demo-party.jpg',
-    video: '/videos/demo-party.mp4',
+    poster: '/images/event-party-poster.jpg',
+    previewVideo: '/videos/event-party-preview.mp4',
+    video: '/videos/event-party-full.mp4',
     alt: 'Convidados dançam em uma festa de formatura sob luzes coloridas',
   },
   {
@@ -311,8 +313,9 @@ const films = [
     plainTitle: 'À mesa',
     title: <>Ficar mais<br /><em>um pouco.</em></>,
     description: 'Uma mesa comprida, histórias sem pressa e aquele último copo que nunca é o último.',
-    poster: '/images/demo-dinner.jpg',
-    video: '/videos/demo-dinner.mp4',
+    poster: '/images/event-dinner-poster.jpg',
+    previewVideo: '/videos/event-dinner-preview.mp4',
+    video: '/videos/event-dinner-full.mp4',
     alt: 'Jantar de celebração com mesa posta e luz de velas',
   },
 ];
