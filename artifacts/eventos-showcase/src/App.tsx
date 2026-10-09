@@ -209,10 +209,10 @@ function Home() {
                   className="watch-button"
                   type="button"
                   onClick={(event) => openFilm(film, event.currentTarget)}
-                  aria-label={`Ver filme: ${film.plainTitle}`}
+                  aria-label={`Ampliar filme: ${film.plainTitle}`}
                 >
-                  <span className="play-icon" aria-hidden="true">▶</span>
-                  Ver o filme
+                  <span className="play-icon" aria-hidden="true">↗</span>
+                  Ampliar vídeo
                 </button>
               </div>
             </div>
