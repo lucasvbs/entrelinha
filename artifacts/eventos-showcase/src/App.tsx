@@ -182,15 +182,29 @@ function Home() {
       </section>
 
       <section className="story-intro" id="producoes" aria-labelledby="story-heading">
-        <div>
+        <div className="story-copy">
           <p className="eyebrow">Imagem que registra · Acervo que preserva</p>
           <h2 id="story-heading">Imagens que comunicam.<br />Acervos que <em>preservam.</em></h2>
+          <p className="story-description">
+            O Estúdio 80 oferece soluções em imagens para projetos institucionais:
+            da cobertura fotográfica e produção audiovisual à digitalização e
+            organização de acervos.
+          </p>
         </div>
-        <p>
-          O Estúdio 80 oferece soluções em imagens para projetos institucionais:
-          da cobertura fotográfica e produção audiovisual à digitalização e
-          organização de acervos.
-        </p>
+        <div className="story-gallery" aria-label="Imagens de produção audiovisual">
+          <figure className="story-gallery-item">
+            <img src="/images/studio80-making-01.webp" alt="Equipe gravando uma entrevista em ambiente interno" loading="eager" decoding="async" />
+          </figure>
+          <figure className="story-gallery-item">
+            <img src="/images/studio80-making-02.webp" alt="Equipe de filmagem trabalhando em uma locação externa" loading="eager" decoding="async" />
+          </figure>
+          <figure className="story-gallery-item">
+            <img src="/images/studio80-making-03.webp" alt="Operador de câmera durante uma gravação ao ar livre" loading="eager" decoding="async" />
+          </figure>
+          <figure className="story-gallery-item">
+            <img src="/images/studio80-making-04.webp" alt="Câmera e monitor em um set de gravação de entrevista" loading="eager" decoding="async" />
+          </figure>
+        </div>
       </section>
 
       <section className="film-stack" aria-label="Vídeos demonstrativos do Estúdio 80">
