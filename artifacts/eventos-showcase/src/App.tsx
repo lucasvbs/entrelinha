@@ -155,37 +155,49 @@ function Home() {
     <main className="site-shell">
       <section className="hero" aria-labelledby="hero-title">
         <nav className="hero-nav" aria-label="Navegação principal">
-          <a className="wordmark" href="#inicio" aria-label="Entrelinha, início">
-            <span className="mark" aria-hidden="true">e</span>
-            entrelinha
+          <a className="brand-lockup" href="#inicio" aria-label="Estúdio 80, início">
+            <span className="logo-placeholder" aria-hidden="true" />
+            <span className="brand-name">Estúdio 80<small>Soluções em imagens</small></span>
           </a>
-          <span className="nav-caption">Experiências que ficam</span>
-          <a className="nav-cta" href="#filmes">Explore a experiência <span aria-hidden="true">↘</span></a>
+          <span className="nav-caption">Produção · Imagem · Memória</span>
+          <a className="nav-cta" href={whatsAppHref} target="_blank" rel="noreferrer">
+            Fale pelo WhatsApp <span aria-hidden="true">↗</span>
+          </a>
         </nav>
         <div className="hero-copy" id="inicio">
-          <p className="eyebrow">Eventos com presença · Brasil</p>
-          <h1 id="hero-title">O dia<br />que <em>fica.</em></h1>
-          <p className="hero-deck">Criamos encontros que parecem feitos para sempre — e têm a cara do agora.</p>
+          <p className="eyebrow">Estúdio 80 · Soluções em imagens</p>
+          <h1 id="hero-title">A memória da sua instituição <em>merece durar.</em></h1>
+          <p className="hero-deck">
+            Produção audiovisual, fotografia institucional e soluções para organizar,
+            digitalizar e preservar imagens e documentos.
+          </p>
+          <a className="hero-contact" href={whatsAppHref} target="_blank" rel="noreferrer">
+            Falar com o Estúdio 80 <span aria-hidden="true">↗</span>
+          </a>
         </div>
         <div className="hero-bottom">
-          <span className="hero-meta">Celebrações autorais<br />Do primeiro abraço ao último brinde</span>
-          <a className="scroll-cue" href="#filmes">Role para conhecer <i aria-hidden="true">↓</i></a>
+          <span className="hero-meta">Imagem ilustrativa<br />Produção · Memória</span>
+          <a className="scroll-cue" href="#producoes">Role para conhecer <i aria-hidden="true">↓</i></a>
         </div>
       </section>
 
-      <section className="story-intro" id="filmes" aria-labelledby="story-heading">
+      <section className="story-intro" id="producoes" aria-labelledby="story-heading">
         <div>
-          <p className="eyebrow">Uma história em três atos</p>
-          <h2 id="story-heading">Não fazemos eventos.<br />Criamos <em>memória.</em></h2>
+          <p className="eyebrow">Imagem que registra · Acervo que preserva</p>
+          <h2 id="story-heading">Imagens que comunicam.<br />Acervos que <em>preservam.</em></h2>
         </div>
         <p>
-          Há um momento em que tudo se encaixa: a luz, as pessoas, a música.
-          A Entrelinha desenha esse instante com cuidado — do primeiro abraço
-          ao último brinde.
+          O Estúdio 80 oferece soluções em imagens para projetos institucionais:
+          da cobertura fotográfica e produção audiovisual à digitalização e
+          organização de acervos.
         </p>
       </section>
 
-      <section className="film-stack" aria-label="Filmes de momentos Entrelinha">
+      <section className="film-stack" aria-label="Vídeos demonstrativos do Estúdio 80">
+        <div className="media-note">
+          <span className="eyebrow">Prévia audiovisual</span>
+          <p>Imagens e vídeos demonstrativos para apresentar a experiência visual do site.</p>
+        </div>
         {films.map((film) => (
           <article className="film-card" key={film.id}>
             <video
@@ -220,21 +232,94 @@ function Home() {
         ))}
       </section>
 
+      <section className="services-section" id="solucoes" aria-labelledby="services-heading">
+        <div className="section-heading">
+          <p className="eyebrow">Soluções em imagens</p>
+          <h2 id="services-heading">Da produção à <em>preservação.</em></h2>
+          <p>Frentes de trabalho que ajudam instituições a registrar atividades, comunicar projetos e cuidar da própria história.</p>
+        </div>
+        <div className="service-grid">
+          <article className="service-card">
+            <span className="service-index">01 · Produções</span>
+            <h3>Registrar e comunicar.</h3>
+            <p>Fotografia institucional e corporativa, cobertura de eventos, produção e captação de vídeos, edição e tratamento de imagens.</p>
+            <ul>
+              <li>Eventos, cerimônias e atividades institucionais</li>
+              <li>Vídeos institucionais, campanhas e projetos especiais</li>
+              <li>Edição e tratamento audiovisual</li>
+            </ul>
+          </article>
+          <article className="service-card">
+            <span className="service-index">02 · Memória</span>
+            <h3>Organizar e preservar.</h3>
+            <p>Soluções para transformar materiais físicos e digitais em acervos organizados, pesquisáveis e acessíveis.</p>
+            <ul>
+              <li>Digitalização de documentos, fotografias, negativos e slides</li>
+              <li>Organização, catalogação e indexação de acervos</li>
+              <li>OCR, tratamento e recuperação digital de imagens</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section className="benefits-section" aria-labelledby="benefits-heading">
+        <div className="benefits-intro">
+          <p className="eyebrow">O que fica</p>
+          <h2 id="benefits-heading">Registros que se tornam <em>acesso.</em></h2>
+        </div>
+        <div className="benefit-list">
+          <p><span>01</span> Eventos e atividades registrados em fotografia e vídeo.</p>
+          <p><span>02</span> Imagens e documentos reunidos em acervos digitais organizados.</p>
+          <p><span>03</span> Documentos pesquisáveis com reconhecimento de texto por OCR.</p>
+          <p><span>04</span> Memória institucional valorizada e mais acessível.</p>
+        </div>
+      </section>
+
+      <section className="faq-section" aria-labelledby="faq-heading">
+        <div className="faq-heading">
+          <p className="eyebrow">Perguntas frequentes</p>
+          <h2 id="faq-heading">Sobre as <em>soluções.</em></h2>
+        </div>
+        <div className="faq-list">
+          <article>
+            <h3>Quais serviços o Estúdio 80 oferece?</h3>
+            <p>Produção fotográfica e audiovisual, digitalização, organização e preservação de acervos de imagens e documentos.</p>
+          </article>
+          <article>
+            <h3>Que materiais podem ser digitalizados?</h3>
+            <p>Documentos, fotografias, negativos, slides e outros materiais.</p>
+          </article>
+          <article>
+            <h3>É possível pesquisar o texto de documentos digitalizados?</h3>
+            <p>Sim. O Estúdio 80 oferece reconhecimento de texto por OCR para tornar documentos pesquisáveis.</p>
+          </article>
+          <article>
+            <h3>Como conversar sobre um projeto?</h3>
+            <p>Entre em contato pelo WhatsApp e conte o que sua instituição precisa produzir, registrar ou preservar.</p>
+          </article>
+        </div>
+      </section>
+
       <section className="afterword" aria-labelledby="afterword-heading">
         <div className="afterword-copy">
-          <p className="eyebrow">A sua história começa aqui</p>
-          <h2 id="afterword-heading">Há coisas que merecem ser <em>sentidas.</em></h2>
+          <p className="eyebrow">A história da sua instituição</p>
+          <h2 id="afterword-heading">Vamos preservar o que <em>importa?</em></h2>
         </div>
         <div className="afterword-note">
-          <p>Um casamento, uma reunião de família ou um motivo que ainda não tem nome. Conte pra gente o que imagina. A gente começa pelo que importa.</p>
-          <a className="contact-link" href="mailto:contato@example.com">Vamos conversar <span aria-hidden="true">↗</span></a>
+          <p>Conte ao Estúdio 80 o que sua instituição precisa produzir, registrar ou preservar. A conversa começa pelo seu projeto.</p>
+          <a className="contact-link" href={whatsAppHref} target="_blank" rel="noreferrer">
+            Conversar pelo WhatsApp <span aria-hidden="true">↗</span>
+          </a>
         </div>
       </section>
 
       <footer className="site-footer">
-        <a className="wordmark" href="#inicio"><span className="mark" aria-hidden="true">e</span>entrelinha</a>
-        <span className="footer-credit">Feito de <em>bons encontros.</em></span>
-        <span className="footer-meta">Brasil · Experiências que ficam</span>
+        <a className="brand-lockup footer-brand" href="#inicio" aria-label="Estúdio 80, início">
+          <span className="logo-placeholder" aria-hidden="true" />
+          <span className="brand-name">Estúdio 80<small>Soluções em imagens</small></span>
+        </a>
+        <a className="footer-whatsapp" href={whatsAppHref} target="_blank" rel="noreferrer">(61) 99261-1547</a>
+        <span className="footer-meta">Produção audiovisual · Memória institucional</span>
       </footer>
 
       {activeFilm && (
@@ -272,7 +357,7 @@ function Home() {
             />
             <div className="modal-title">
               <span id="modal-film-title">{activeFilm.plainTitle}</span>
-              <span>Entrelinha · Filme {activeFilm.number}</span>
+              <span>Estúdio 80 · Vídeo demonstrativo {activeFilm.number}</span>
             </div>
           </div>
         </div>
@@ -285,40 +370,43 @@ const films = [
   {
     id: 'ceremony',
     number: '01',
-    label: 'O começo',
-    plainTitle: 'A cerimónia',
-    title: <>O começo<br />de <em>tudo.</em></>,
-    description: 'O primeiro aplauso, o abraço apertado, a certeza de que esse momento vai ficar.',
+    label: 'Fotografia institucional',
+    plainTitle: 'Fotografia institucional',
+    title: <>A instituição<br />em <em>foco.</em></>,
+    description: 'Cobertura fotográfica de eventos, cerimônias e atividades institucionais.',
     poster: '/images/event-ceremony-poster.jpg',
     previewVideo: '/videos/event-ceremony-preview.mp4',
     video: '/videos/event-ceremony-full.mp4',
-    alt: 'Celebração de formatura em um palco iluminado por luz dourada',
+    alt: 'Prévia ilustrativa de uma celebração em um palco iluminado',
   },
   {
     id: 'party',
     number: '02',
-    label: 'A entrega',
-    plainTitle: 'A celebração',
-    title: <>Até a noite<br /><em>dançar.</em></>,
-    description: 'A música sobe, os sapatos ficam de lado. O melhor plano é não ter plano.',
+    label: 'Produção audiovisual',
+    plainTitle: 'Produção audiovisual',
+    title: <>Histórias em<br /><em>movimento.</em></>,
+    description: 'Captação e produção de vídeos institucionais, campanhas e projetos especiais.',
     poster: '/images/event-party-poster.jpg',
     previewVideo: '/videos/event-party-preview.mp4',
     video: '/videos/event-party-full.mp4',
-    alt: 'Convidados dançam em uma festa de formatura sob luzes coloridas',
+    alt: 'Prévia ilustrativa de uma festa sob luzes coloridas',
   },
   {
     id: 'dinner',
     number: '03',
-    label: 'O brinde',
-    plainTitle: 'À mesa',
-    title: <>Ficar mais<br /><em>um pouco.</em></>,
-    description: 'Uma mesa comprida, histórias sem pressa e aquele último copo que nunca é o último.',
+    label: 'Memória institucional',
+    plainTitle: 'Memória institucional',
+    title: <>Acervos para<br /><em>preservar.</em></>,
+    description: 'Digitalização, organização e cuidado com imagens e documentos institucionais.',
     poster: '/images/event-dinner-poster.jpg',
     previewVideo: '/videos/event-dinner-preview.mp4',
     video: '/videos/event-dinner-full.mp4',
-    alt: 'Jantar de celebração com mesa posta e luz de velas',
+    alt: 'Prévia ilustrativa de um jantar com mesa posta e luz de velas',
   },
 ];
+
+const whatsAppHref =
+  'https://wa.me/5561992611547?text=Ol%C3%A1%2C%20quero%20conversar%20sobre%20um%20projeto%20para%20o%20Est%C3%BAdio%2080.';
 
 function Router() {
   return (
