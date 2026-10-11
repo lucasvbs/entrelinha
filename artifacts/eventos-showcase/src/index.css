@@ -335,9 +335,9 @@
   background: #244e68;
   box-shadow: 0 28px 80px rgba(0,0,0,.24);
 }
-.film-card:nth-child(1) { z-index: 1; }
-.film-card:nth-child(2) { z-index: 2; }
-.film-card:nth-child(3) { z-index: 3; }
+.film-card:nth-of-type(1) { z-index: 1; }
+.film-card:nth-of-type(2) { z-index: 2; }
+.film-card:nth-of-type(3) { z-index: 3; }
 .film-card img, .film-card .film-preview {
   position: absolute;
   inset: 0;
