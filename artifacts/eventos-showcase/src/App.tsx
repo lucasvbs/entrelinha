@@ -243,7 +243,6 @@ function Home() {
       <section className="film-stack" aria-label="Vídeos demonstrativos do Estúdio 80">
         <div className="media-note">
           <span className="eyebrow">Prévia audiovisual</span>
-          <p>Imagens e vídeos demonstrativos para apresentar a experiência visual do site.</p>
         </div>
         {films.map((film) => (
           <article className="film-card" key={film.id}>
