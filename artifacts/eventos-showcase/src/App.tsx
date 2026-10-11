@@ -254,7 +254,7 @@ function Home() {
         </div>
         <div className="service-grid">
           <article className="service-card">
-            <span className="service-index">01 · Produções</span>
+            <span className="service-index">Produções</span>
             <h3>Registrar e comunicar.</h3>
             <p>Fotografia institucional e corporativa, cobertura de eventos, produção e captação de vídeos, edição e tratamento de imagens.</p>
             <ul>
@@ -264,7 +264,7 @@ function Home() {
             </ul>
           </article>
           <article className="service-card">
-            <span className="service-index">02 · Memória</span>
+            <span className="service-index">Memória</span>
             <h3>Organizar e preservar.</h3>
             <p>Soluções para transformar materiais físicos e digitais em acervos organizados, pesquisáveis e acessíveis.</p>
             <ul>
