@@ -1,6 +1,11 @@
 {
   "name": "Estúdio 80",
   "short_name": "Estúdio 80",
+  "description": "Produção audiovisual, fotografia institucional e preservação de acervos.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "lang": "pt-BR",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",

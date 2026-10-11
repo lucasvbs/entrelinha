@@ -342,6 +342,10 @@ function Home() {
             <h3>Como conversar sobre um projeto?</h3>
             <p>Entre em contato pelo WhatsApp e conte o que sua instituição precisa produzir, registrar ou preservar.</p>
           </article>
+          <article data-reveal="right">
+            <h3>Como adicionar o Estúdio 80 à tela inicial do celular?</h3>
+            <p>No iPhone, abra este site no Safari, toque em Compartilhar e escolha “Adicionar à Tela de Início”. No Android, abra no Chrome e escolha “Instalar app” ou “Adicionar à tela inicial” no menu. O atalho abre o site em uma janela própria; é necessária conexão com a internet.</p>
+          </article>
         </div>
       </section>
 
