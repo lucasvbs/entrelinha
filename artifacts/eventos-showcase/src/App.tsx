@@ -189,8 +189,7 @@ function Home() {
       <section className="hero" aria-labelledby="hero-title">
         <nav className="hero-nav" aria-label="Navegação principal">
           <a className="brand-lockup" href="#inicio" aria-label="Estúdio 80, início">
-            <span className="logo-placeholder" aria-hidden="true" />
-            <span className="brand-name">Estúdio 80<small>Soluções em imagens</small></span>
+            <img className="brand-logo" src="/images/logo-estudio-80.jpg" alt="" />
           </a>
           <span className="nav-caption">Produção · Imagem · Memória</span>
           <a className="nav-cta" href={whatsAppHref} target="_blank" rel="noreferrer">
@@ -361,8 +360,7 @@ function Home() {
 
       <footer className="site-footer">
         <a className="brand-lockup footer-brand" href="#inicio" aria-label="Estúdio 80, início">
-          <span className="logo-placeholder" aria-hidden="true" />
-          <span className="brand-name">Estúdio 80<small>Soluções em imagens</small></span>
+          <img className="brand-logo" src="/images/logo-estudio-80.jpg" alt="" />
         </a>
         <a className="footer-whatsapp" href={whatsAppHref} target="_blank" rel="noreferrer">(61) 99261-1547</a>
         <span className="footer-meta">Produção audiovisual · Memória institucional</span>
