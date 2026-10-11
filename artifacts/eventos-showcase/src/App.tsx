@@ -260,7 +260,7 @@ function Home() {
               tabIndex={-1}
             />
             <div className="card-content">
-              <span className="card-index">{film.number} / 03&nbsp;&nbsp; · &nbsp;&nbsp;{film.label}</span>
+              <span className="card-index">{film.label}</span>
               <h3 className="card-title">{film.title}</h3>
               <div className="card-bottom">
                 <p>{film.description}</p>
@@ -404,7 +404,7 @@ function Home() {
             />
             <div className="modal-title">
               <span id="modal-film-title">{activeFilm.plainTitle}</span>
-              <span>Estúdio 80 · Vídeo demonstrativo {activeFilm.number}</span>
+              <span>Estúdio 80 · Vídeo demonstrativo</span>
             </div>
           </div>
         </div>
@@ -416,7 +416,6 @@ function Home() {
 const films = [
   {
     id: 'ceremony',
-    number: '01',
     label: 'Fotografia institucional',
     plainTitle: 'Fotografia institucional',
     title: <>A instituição<br />em <em>foco.</em></>,
@@ -428,7 +427,6 @@ const films = [
   },
   {
     id: 'party',
-    number: '02',
     label: 'Produção audiovisual',
     plainTitle: 'Produção audiovisual',
     title: <>Histórias em<br /><em>movimento.</em></>,
@@ -440,7 +438,6 @@ const films = [
   },
   {
     id: 'dinner',
-    number: '03',
     label: 'Memória institucional',
     plainTitle: 'Memória institucional',
     title: <>Acervos para<br /><em>preservar.</em></>,
