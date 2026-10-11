@@ -20,6 +20,39 @@ function Home() {
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      !('IntersectionObserver' in window)
+    ) {
+      return;
+    }
+
+    const revealElements = Array.from(
+      document.querySelectorAll<HTMLElement>('[data-reveal]'),
+    );
+    if (!revealElements.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-revealed');
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -8% 0px' },
+    );
+
+    revealElements.forEach((element) => observer.observe(element));
+    document.documentElement.classList.add('reveal-ready');
+
+    return () => {
+      observer.disconnect();
+      document.documentElement.classList.remove('reveal-ready');
+    };
+  }, []);
+
+  useEffect(() => {
     if (!activeFilm) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -247,13 +280,13 @@ function Home() {
       </section>
 
       <section className="services-section" id="solucoes" aria-labelledby="services-heading">
-        <div className="section-heading">
+        <div className="section-heading" data-reveal="left">
           <p className="eyebrow">Soluções em imagens</p>
           <h2 id="services-heading">Da produção à <em>preservação.</em></h2>
           <p>Frentes de trabalho que ajudam instituições a registrar atividades, comunicar projetos e cuidar da própria história.</p>
         </div>
         <div className="service-grid">
-          <article className="service-card">
+          <article className="service-card" data-reveal="up">
             <span className="service-index">Produções</span>
             <h3>Registrar e comunicar.</h3>
             <p>Fotografia institucional e corporativa, cobertura de eventos, produção e captação de vídeos, edição e tratamento de imagens.</p>
@@ -263,7 +296,7 @@ function Home() {
               <li>Edição e tratamento audiovisual</li>
             </ul>
           </article>
-          <article className="service-card">
+          <article className="service-card" data-reveal="up">
             <span className="service-index">Memória</span>
             <h3>Organizar e preservar.</h3>
             <p>Soluções para transformar materiais físicos e digitais em acervos organizados, pesquisáveis e acessíveis.</p>
@@ -277,37 +310,37 @@ function Home() {
       </section>
 
       <section className="benefits-section" aria-labelledby="benefits-heading">
-        <div className="benefits-intro">
+        <div className="benefits-intro" data-reveal="left">
           <p className="eyebrow">O que fica</p>
           <h2 id="benefits-heading">Registros que se tornam <em>acesso.</em></h2>
         </div>
         <div className="benefit-list">
-          <p><span>01</span> Eventos e atividades registrados em fotografia e vídeo.</p>
-          <p><span>02</span> Imagens e documentos reunidos em acervos digitais organizados.</p>
-          <p><span>03</span> Documentos pesquisáveis com reconhecimento de texto por OCR.</p>
-          <p><span>04</span> Memória institucional valorizada e mais acessível.</p>
+          <p data-reveal="right"><span>01</span> Eventos e atividades registrados em fotografia e vídeo.</p>
+          <p data-reveal="right"><span>02</span> Imagens e documentos reunidos em acervos digitais organizados.</p>
+          <p data-reveal="right"><span>03</span> Documentos pesquisáveis com reconhecimento de texto por OCR.</p>
+          <p data-reveal="right"><span>04</span> Memória institucional valorizada e mais acessível.</p>
         </div>
       </section>
 
       <section className="faq-section" aria-labelledby="faq-heading">
-        <div className="faq-heading">
+        <div className="faq-heading" data-reveal="left">
           <p className="eyebrow">Perguntas frequentes</p>
           <h2 id="faq-heading">Sobre as <em>soluções.</em></h2>
         </div>
         <div className="faq-list">
-          <article>
+          <article data-reveal="right">
             <h3>Quais serviços o Estúdio 80 oferece?</h3>
             <p>Produção fotográfica e audiovisual, digitalização, organização e preservação de acervos de imagens e documentos.</p>
           </article>
-          <article>
+          <article data-reveal="right">
             <h3>Que materiais podem ser digitalizados?</h3>
             <p>Documentos, fotografias, negativos, slides e outros materiais.</p>
           </article>
-          <article>
+          <article data-reveal="right">
             <h3>É possível pesquisar o texto de documentos digitalizados?</h3>
             <p>Sim. O Estúdio 80 oferece reconhecimento de texto por OCR para tornar documentos pesquisáveis.</p>
           </article>
-          <article>
+          <article data-reveal="right">
             <h3>Como conversar sobre um projeto?</h3>
             <p>Entre em contato pelo WhatsApp e conte o que sua instituição precisa produzir, registrar ou preservar.</p>
           </article>
@@ -315,11 +348,11 @@ function Home() {
       </section>
 
       <section className="afterword" aria-labelledby="afterword-heading">
-        <div className="afterword-copy">
+        <div className="afterword-copy" data-reveal="left">
           <p className="eyebrow">A história da sua instituição</p>
           <h2 id="afterword-heading">Vamos preservar o que <em>importa?</em></h2>
         </div>
-        <div className="afterword-note">
+        <div className="afterword-note" data-reveal="right">
           <p>Conte ao Estúdio 80 o que sua instituição precisa produzir, registrar ou preservar. A conversa começa pelo seu projeto.</p>
           <a className="contact-link" href={whatsAppHref} target="_blank" rel="noreferrer">
             Conversar pelo WhatsApp <span aria-hidden="true">↗</span>

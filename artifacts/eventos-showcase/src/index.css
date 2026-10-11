@@ -707,6 +707,27 @@
 .hero-copy h1 { animation-delay: .23s; }
 .hero-copy .hero-deck { animation-delay: .37s; }
 
+.reveal-ready [data-reveal] {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity .75s cubic-bezier(.2,.75,.2,1), transform .75s cubic-bezier(.2,.75,.2,1);
+  will-change: opacity, transform;
+}
+.reveal-ready [data-reveal="left"] { transform: translate3d(-28px, 12px, 0); }
+.reveal-ready [data-reveal="right"] { transform: translate3d(28px, 12px, 0); }
+.reveal-ready [data-reveal].is-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  will-change: auto;
+}
+.service-card:nth-child(2),
+.benefit-list p:nth-child(2),
+.faq-list article:nth-child(2) { transition-delay: .12s; }
+.benefit-list p:nth-child(3),
+.faq-list article:nth-child(3) { transition-delay: .22s; }
+.benefit-list p:nth-child(4),
+.faq-list article:nth-child(4) { transition-delay: .32s; }
+
 @media (max-width: 760px) {
   .hero { height: 100svh; min-height: 690px; max-height: 900px; }
   .hero::before { background-position: 59% center; }
