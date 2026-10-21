@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useRef, useState } from 'react';
+import { type ReactNode, useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
@@ -14,11 +14,6 @@ import {
 const queryClient = new QueryClient();
 
 function Home() {
-  const [activeFilm, setActiveFilm] = useState<(typeof films)[number] | null>(null);
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const returnFocusRef = useRef<HTMLElement | null>(null);
-  const modalRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     if (
       window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
@@ -53,143 +48,74 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    if (!activeFilm) return;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    const focusTimer = window.setTimeout(() => closeButtonRef.current?.focus(), 0);
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setActiveFilm(null);
-        return;
-      }
-      if (event.key === 'Tab' && modalRef.current) {
-        const focusable = Array.from(
-          modalRef.current.querySelectorAll<HTMLElement>(
-            'button, video[tabindex], video[controls]',
-          ),
-        ).filter((element) => !element.hasAttribute('disabled'));
-        if (!focusable.length) return;
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-        if (event.shiftKey && document.activeElement === first) {
-          event.preventDefault();
-          last.focus();
-        } else if (!event.shiftKey && document.activeElement === last) {
-          event.preventDefault();
-          first.focus();
-        }
-      }
-    };
-    document.addEventListener('keydown', onKeyDown);
-    return () => {
-      window.clearTimeout(focusTimer);
-      document.body.style.overflow = previousOverflow;
-      document.removeEventListener('keydown', onKeyDown);
-      returnFocusRef.current?.focus();
-    };
-  }, [activeFilm]);
-
-  useEffect(() => {
-    const previews = Array.from(
-      document.querySelectorAll<HTMLVideoElement>('.film-preview'),
+    const section = document.querySelector<HTMLElement>('.photo-story');
+    const images = Array.from(
+      document.querySelectorAll<HTMLImageElement>('.photo-story-image'),
     );
-    const stopPreviews = () => {
-      previews.forEach((video) => {
-        video.autoplay = false;
-        video.pause();
-      });
-    };
-
-    if (activeFilm) {
-      stopPreviews();
-      return;
-    }
+    if (!section || images.length < 2) return;
 
     const reduceMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)',
     ).matches;
-
-    if (reduceMotion) {
-      stopPreviews();
-      return;
-    }
+    if (reduceMotion) return;
 
     let animationFrame = 0;
-    let previousScrollY = window.scrollY;
+    const clamp = (value: number, min: number, max: number) =>
+      Math.min(max, Math.max(min, value));
+    const smoothstep = (start: number, end: number, value: number) => {
+      const t = clamp((value - start) / (end - start), 0, 1);
+      return t * t * (3 - 2 * t);
+    };
 
-    const updatePlayback = () => {
-      const currentScrollY = window.scrollY;
-      const scrollingDown = currentScrollY >= previousScrollY;
-      previousScrollY = currentScrollY;
-      const x = Math.min(window.innerWidth - 1, Math.round(window.innerWidth / 2));
-      const y = Math.min(
-        window.innerHeight - 1,
-        Math.max(
-          0,
-          Math.round(window.innerHeight * (scrollingDown ? 0.82 : 0.18)),
-        ),
-      );
-      const activeCard = document
-        .elementFromPoint(x, y)
-        ?.closest<HTMLElement>('.film-card');
-      const activeVideo =
-        activeCard?.querySelector<HTMLVideoElement>('.film-preview') ?? null;
+    const updateStory = () => {
+      const rect = section.getBoundingClientRect();
+      const scrollDistance = Math.max(1, rect.height - window.innerHeight);
+      const progress = clamp(-rect.top / scrollDistance, 0, 1);
+      const position = progress * (images.length - 1);
 
-      previews.forEach((video) => {
-        const shouldPlay = video === activeVideo;
-        video.muted = true;
-        video.autoplay = shouldPlay;
+      images.forEach((image, index) => {
+        const enter = index === 0
+          ? 1
+          : smoothstep(index - 0.28, index - 0.02, position);
+        const leave = index === images.length - 1
+          ? 1
+          : 1 - smoothstep(index + 0.72, index + 0.98, position);
+        const opacity = Math.min(enter, leave);
+        const depth = clamp((position - index + 1) / 2, 0, 1);
+        const scale = 1.06 + depth * 0.07;
+        const verticalShift = 3 - depth * 6;
 
-        if (shouldPlay && video.paused) {
-          void video.play().catch(() => {
-            video.autoplay = false;
-          });
-        } else if (!shouldPlay && !video.paused) {
-          video.pause();
-        }
+        image.style.opacity = String(opacity);
+        image.style.transform = `translate3d(0, ${verticalShift}%, 0) scale(${scale})`;
+        image.setAttribute('aria-hidden', opacity < 0.15 ? 'true' : 'false');
       });
     };
 
-    const schedulePlaybackUpdate = () => {
-      if (animationFrame) window.cancelAnimationFrame(animationFrame);
+    const scheduleUpdate = () => {
+      if (animationFrame) return;
       animationFrame = window.requestAnimationFrame(() => {
         animationFrame = 0;
-        updatePlayback();
+        updateStory();
       });
     };
 
-    const observer = new IntersectionObserver(
-      schedulePlaybackUpdate,
-      { threshold: [0, 0.15, 0.35, 0.65] },
-    );
-
-    previews.forEach((video) => observer.observe(video));
-    window.addEventListener('scroll', schedulePlaybackUpdate, {
-      passive: true,
-    });
-    window.addEventListener('resize', schedulePlaybackUpdate);
-    updatePlayback();
+    window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate);
+    updateStory();
 
     return () => {
-      observer.disconnect();
-      window.removeEventListener('scroll', schedulePlaybackUpdate);
-      window.removeEventListener('resize', schedulePlaybackUpdate);
+      window.removeEventListener('scroll', scheduleUpdate);
+      window.removeEventListener('resize', scheduleUpdate);
       if (animationFrame) window.cancelAnimationFrame(animationFrame);
-      stopPreviews();
     };
-  }, [activeFilm]);
-
-  const openFilm = (film: (typeof films)[number], trigger: HTMLElement) => {
-    returnFocusRef.current = trigger;
-    setActiveFilm(film);
-  };
+  }, []);
 
   return (
     <main className="site-shell">
       <section className="hero" aria-labelledby="hero-title">
         <nav className="hero-nav" aria-label="Navegação principal">
           <a className="brand-lockup" href="#inicio" aria-label="Estúdio 80, início">
-            <img className="brand-logo" src="/images/logo-estudio-80.jpg" alt="" />
+            <img className="brand-logo" src="/images/logo-estudio-80-branco.png" alt="" />
           </a>
           <span className="nav-caption">Produção · Imagem · Memória</span>
           <a className="nav-cta" href={whatsAppHref} target="_blank" rel="noreferrer">
@@ -197,84 +123,40 @@ function Home() {
           </a>
         </nav>
         <div className="hero-copy" id="inicio">
-          <p className="eyebrow">Estúdio 80 · Soluções em imagens</p>
-          <h1 id="hero-title">A memória da sua instituição <em>merece durar.</em></h1>
-          <p className="hero-deck">
-            Produção audiovisual, fotografia institucional e soluções para organizar,
-            digitalizar e preservar imagens e documentos.
-          </p>
-          <a className="hero-contact" href={whatsAppHref} target="_blank" rel="noreferrer">
-            Falar com o Estúdio 80 <span aria-hidden="true">↗</span>
-          </a>
+          <h1 id="hero-title">
+            <span>CONTAR UMA</span>
+            <span>HISTÓRIA <em>QUE FIQUE</em></span>
+            <span><em>NA MEMÓRIA,</em></span>
+            <span>SOMOS OS MELHORES NISSO.</span>
+          </h1>
         </div>
         <div className="hero-bottom">
-          <span className="hero-meta">Imagem ilustrativa<br />Produção · Memória</span>
+          <span className="hero-meta">Produções audiovisuais — Eventos — Digitalização.</span>
           <a className="scroll-cue" href="#producoes">Role para conhecer <i aria-hidden="true">↓</i></a>
         </div>
       </section>
 
       <section className="story-intro" id="producoes" aria-labelledby="story-heading">
         <div className="story-copy">
-          <p className="eyebrow">Imagem que registra · Acervo que preserva</p>
-          <h2 id="story-heading">Imagens que comunicam.<br />Acervos que <em>preservam.</em></h2>
-          <p className="story-description">
-            O Estúdio 80 oferece soluções em imagens para projetos institucionais:
-            da cobertura fotográfica e produção audiovisual à digitalização e
-            organização de acervos.
-          </p>
-        </div>
-        <div className="story-gallery" aria-label="Imagens de produção audiovisual">
-          <figure className="story-gallery-item">
-            <img src="/images/studio80-making-01.webp" alt="Equipe gravando uma entrevista em ambiente interno" loading="eager" decoding="async" />
-          </figure>
-          <figure className="story-gallery-item">
-            <img src="/images/studio80-making-02.webp" alt="Equipe de filmagem trabalhando em uma locação externa" loading="eager" decoding="async" />
-          </figure>
-          <figure className="story-gallery-item">
-            <img src="/images/studio80-making-03.webp" alt="Operador de câmera durante uma gravação ao ar livre" loading="eager" decoding="async" />
-          </figure>
-          <figure className="story-gallery-item">
-            <img src="/images/studio80-making-04.webp" alt="Câmera e monitor em um set de gravação de entrevista" loading="eager" decoding="async" />
-          </figure>
+          <h2 id="story-heading">Histórias contadas<br />através da <em>fotografia.</em></h2>
         </div>
       </section>
 
-      <section className="film-stack" aria-label="Vídeos demonstrativos do Estúdio 80">
-        <div className="media-note">
-          <span className="eyebrow">Prévia audiovisual</span>
-        </div>
-        {films.map((film) => (
-          <article className="film-card" key={film.id}>
-            <video
-              className="film-preview"
-              src={film.previewVideo}
-              poster={film.poster}
-              data-testid={`film-preview-${film.id}`}
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              aria-hidden="true"
-              tabIndex={-1}
+      <section className="photo-story" id="fotografias" aria-label="Sequência fotográfica institucional">
+        <div className="photo-story-stage">
+          {photoStoryImages.map((photo, index) => (
+            <img
+              className="photo-story-image"
+              src={photo.src}
+              alt={photo.alt}
+              loading={index === 0 ? 'eager' : 'lazy'}
+              decoding="async"
+              style={{ opacity: index === 0 ? 1 : 0 }}
+              aria-hidden={index !== 0}
+              key={photo.src}
             />
-            <div className="card-content">
-              <span className="card-index">{film.label}</span>
-              <h3 className="card-title">{film.title}</h3>
-              <div className="card-bottom">
-                <p>{film.description}</p>
-                <button
-                  className="watch-button"
-                  type="button"
-                  onClick={(event) => openFilm(film, event.currentTarget)}
-                  aria-label={`Ampliar filme: ${film.plainTitle}`}
-                >
-                  <span className="play-icon" aria-hidden="true">↗</span>
-                  Ampliar vídeo
-                </button>
-              </div>
-            </div>
-          </article>
-        ))}
+          ))}
+        </div>
       </section>
 
       <section className="services-section" id="solucoes" aria-labelledby="services-heading">
@@ -364,89 +246,28 @@ function Home() {
 
       <footer className="site-footer">
         <a className="brand-lockup footer-brand" href="#inicio" aria-label="Estúdio 80, início">
-          <img className="brand-logo" src="/images/logo-estudio-80.jpg" alt="" />
+          <img className="brand-logo" src="/images/logo-estudio-80-branco.png" alt="" />
         </a>
         <a className="footer-whatsapp" href={whatsAppHref} target="_blank" rel="noreferrer">(61) 99261-1547</a>
         <span className="footer-meta">Produção audiovisual · Memória institucional</span>
       </footer>
 
-      {activeFilm && (
-        <div
-          className="video-modal"
-          role="presentation"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) setActiveFilm(null);
-          }}
-        >
-          <div
-            className="modal-frame"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="modal-film-title"
-            ref={modalRef}
-          >
-            <button
-              className="modal-close"
-              type="button"
-              aria-label="Fechar filme"
-              ref={closeButtonRef}
-              onClick={() => setActiveFilm(null)}
-            >
-              ×
-            </button>
-            <video
-              src={activeFilm.video}
-              poster={activeFilm.poster}
-              controls
-              autoPlay
-              playsInline
-              preload="metadata"
-              aria-label={`Filme ${activeFilm.plainTitle}`}
-            />
-            <div className="modal-title">
-              <span id="modal-film-title">{activeFilm.plainTitle}</span>
-              <span>Estúdio 80 · Vídeo demonstrativo</span>
-            </div>
-          </div>
-        </div>
-      )}
     </main>
   );
 }
 
-const films = [
+const photoStoryImages = [
   {
-    id: 'ceremony',
-    label: 'Fotografia institucional',
-    plainTitle: 'Fotografia institucional',
-    title: <>A instituição<br />em <em>foco.</em></>,
-    description: 'Cobertura fotográfica de eventos, cerimônias e atividades institucionais.',
-    poster: '/images/event-ceremony-poster.jpg',
-    previewVideo: '/videos/event-ceremony-preview.mp4',
-    video: '/videos/event-ceremony-full.mp4',
-    alt: 'Prévia ilustrativa de uma celebração em um palco iluminado',
+    src: '/images/scroll-photo-01.jpg',
+    alt: 'Palestrante se dirigindo ao público em um palco iluminado',
   },
   {
-    id: 'party',
-    label: 'Produção audiovisual',
-    plainTitle: 'Produção audiovisual',
-    title: <>Histórias em<br /><em>movimento.</em></>,
-    description: 'Captação e produção de vídeos institucionais, campanhas e projetos especiais.',
-    poster: '/images/event-party-poster.jpg',
-    previewVideo: '/videos/event-party-preview.mp4',
-    video: '/videos/event-party-full.mp4',
-    alt: 'Prévia ilustrativa de uma festa sob luzes coloridas',
+    src: '/images/scroll-photo-02.jpg',
+    alt: 'Entrevista coletiva com representantes e profissionais de imprensa',
   },
   {
-    id: 'dinner',
-    label: 'Memória institucional',
-    plainTitle: 'Memória institucional',
-    title: <>Acervos para<br /><em>preservar.</em></>,
-    description: 'Digitalização, organização e cuidado com imagens e documentos institucionais.',
-    poster: '/images/event-dinner-poster.jpg',
-    previewVideo: '/videos/event-dinner-preview.mp4',
-    video: '/videos/event-dinner-full.mp4',
-    alt: 'Prévia ilustrativa de um jantar com mesa posta e luz de velas',
+    src: '/images/scroll-photo-03.jpg',
+    alt: 'Autoridades reunidas em uma mesa durante uma sessão institucional',
   },
 ];
 
